@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daifugo - Ultimate Card Game</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="app">
+        <!-- Lobby State -->
+        <main id="lobby" class="pane glass-panel">
+            <h1>DAIFUGO</h1>
+            <p>Join a room to start playing</p>
+            <div class="form-group">
+                <input type="text" id="playerName" placeholder="Your Name" />
+                <input type="hidden" id="roomId" value="room1" />
+                <button id="joinBtn" class="primary-btn">Join Game</button>
+            </div>
+        </main>
+
+        <!-- Game State -->
+        <main id="game" class="pane hidden">
+            <header class="game-header glass-panel">
+                <div id="gameStatus">Waiting for players...</div>
+                <button id="startBtn" class="action-btn hidden primary-btn">Start Game</button>
+            </header>
+            
+            <div id="opponentsArea" class="opponents-container"></div>
+            
+            <div class="board-area glass-panel">
+                <div id="boardCards" class="playing-cards"></div>
+            </div>
+            
+            <div class="player-area">
+                <div class="control-panel">
+                    <button id="playBtn" class="primary-btn" disabled>Play Selected</button>
+                    <button id="passBtn" class="secondary-btn" disabled>Pass</button>
+                </div>
+                <div id="myCards" class="my-hand"></div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="/src/socket.js"></script>
+    <script src="/src/ui.js"></script>
+    <script src="/src/main.js"></script>
+</body>
+</html>
