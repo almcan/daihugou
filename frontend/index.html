@@ -24,8 +24,13 @@
         <main id="game" class="pane hidden">
             <header class="game-header glass-panel">
                 <div id="gameStatus">Waiting for players...</div>
-                <button id="startBtn" class="action-btn hidden primary-btn">Start Game</button>
+                <div>
+                    <button id="leaveBtn" class="secondary-btn hidden">退出する</button>
+                    <button id="startBtn" class="action-btn hidden primary-btn">Start Game</button>
+                </div>
             </header>
+            
+            <div id="ruleStatus" class="rule-status glass-panel hidden"></div>
             
             <div id="opponentsArea" class="opponents-container"></div>
             
@@ -35,12 +40,24 @@
             
             <div class="player-area">
                 <div class="control-panel">
-                    <button id="playBtn" class="primary-btn" disabled>Play Selected</button>
-                    <button id="passBtn" class="secondary-btn" disabled>Pass</button>
+                    <button id="playBtn" class="primary-btn" disabled>カードを出す</button>
+                    <button id="passBtn" class="secondary-btn" disabled>パス</button>
                 </div>
                 <div id="myCards" class="my-hand"></div>
             </div>
         </main>
+    </div>
+
+    <div id="winModal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <h2 id="winMessage"></h2>
+            <button id="closeModalBtn" class="primary-btn mt-4">閉じる</button>
+        </div>
+    </div>
+
+    <div id="interactionModal" class="modal hidden">
+        <div class="modal-content glass-panel" id="interactionContent">
+        </div>
     </div>
     
     <script src="/src/socket.js"></script>

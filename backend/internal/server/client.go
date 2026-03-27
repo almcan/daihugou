@@ -121,27 +121,35 @@ func (c *Client) handleMessage(msgBytes []byte) {
 		}
 
 	case "play_cards":
-		if c.room != nil && c.player != nil {
-			cardsRaw, ok := msg.Data["cards"].([]interface{})
-			if !ok {
-				return
-			}
-			var playCards []models.Card
-			for _, v := range cardsRaw {
-				cMap, ok := v.(map[string]interface{})
-				if !ok {
-					continue
+		if c.room != nil && c.player != nil && msg.Data != nil {
+			if cardsInterface, ok := msg.Data["cards"].([]interface{}); ok {
+				var playCards []models.Card
+				for _, ci := range cardsInterface {
+					if cMap, ok := ci.(map[string]interface{}); ok {
+						playCards = append(playCards, models.Card{
+							Suit: models.Suit(cMap["suit"].(string)),
+							Rank: int(cMap["rank"].(float64)),
+						})
+					}
 				}
-				suit := models.Suit(cMap["suit"].(string))
-				rank := int(cMap["rank"].(float64))
-				playCards = append(playCards, models.Card{Suit: suit, Rank: rank})
+				
+				err := logic.PlayTurn(c.room, c.player.ID, playCards)
+				if err != nil {
+					c.conn.WriteJSON(map[string]interface{}{"type": "error", "message": err.Error()})
+					return
+				}
+				c.manager.BroadcastToRoom(c.room.ID)
 			}
-			err := logic.PlayTurn(c.room, c.player.ID, playCards)
+		}
+
+	case "resolve_interaction":
+		if c.room != nil && c.player != nil && msg.Data != nil {
+			err := logic.ResolveInteraction(c.room, c.player.ID, msg.Data)
 			if err != nil {
-				log.Println("Play error:", err)
+				c.conn.WriteJSON(map[string]interface{}{"type": "error", "message": err.Error()})
 				return
 			}
-			c.BroadcastRoomState()
+			c.manager.BroadcastToRoom(c.room.ID)
 		}
 
 	case "pass_turn":

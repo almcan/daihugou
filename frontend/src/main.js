@@ -9,6 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
         window.uiManager.showGame();
     });
 
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.isComposing) {
+            const lobby = document.getElementById('lobby');
+            if (lobby && !lobby.classList.contains('hidden')) {
+                document.getElementById('joinBtn').click();
+            }
+        }
+    });
+
     window.socketClient.on('state_update', (state) => {
         if (!myPlayerId) {
             const pName = document.getElementById('playerName').value || 'Guest';
@@ -34,5 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('passBtn').addEventListener('click', () => {
         window.socketClient.send('pass_turn', {});
         window.uiManager.selectedCards = [];
+    });
+
+    document.getElementById('leaveBtn').addEventListener('click', () => {
+        window.location.reload();
+    });
+
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+        document.getElementById('winModal').classList.add('hidden');
     });
 });
